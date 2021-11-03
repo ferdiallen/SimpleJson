@@ -3,6 +3,7 @@ package com.allen.simplejson.navigation
 import androidx.compose.animation.ExperimentalAnimationApi
 import androidx.compose.animation.core.animateDpAsState
 import androidx.compose.animation.core.spring
+import androidx.compose.animation.core.tween
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
@@ -17,6 +18,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.SpanStyle
 import androidx.compose.ui.text.buildAnnotatedString
 import androidx.compose.ui.text.font.FontFamily
@@ -41,14 +43,29 @@ fun MainDisplay(navcon: NavHostController, vm: MainViewModels) {
     var sizestate by remember {
         mutableStateOf(120.dp)
     }
-    sizestate += 50.dp
+    var size2state by remember {
+        mutableStateOf(120.dp)
+    }
     val sizegrows by animateDpAsState(targetValue = sizestate, spring())
+    val sizegrows2 by animateDpAsState(targetValue = size2state, tween(durationMillis = 150))
     choices[0] = true
     var select1 by remember {
         mutableStateOf(choices[0])
     }
     var select2 by remember {
         mutableStateOf(choices[1])
+    }
+    SideEffect {
+        when {
+            select1 -> {
+                sizestate = 150.dp
+                size2state = 120.dp
+            }
+            select2 -> {
+                sizestate = 120.dp
+                size2state = 150.dp
+            }
+        }
     }
     Column(
         modifier = Modifier
@@ -95,7 +112,6 @@ fun MainDisplay(navcon: NavHostController, vm: MainViewModels) {
                         .background(
                             color = when (select1) {
                                 true -> {
-                                    sizestate = 130.dp
                                     Color.Black
                                 }
                                 false -> {
@@ -123,7 +139,7 @@ fun MainDisplay(navcon: NavHostController, vm: MainViewModels) {
                 Box(
                     modifier = Modifier
                         .height(45.dp)
-                        .width(120.dp)
+                        .width(sizegrows2)
                         .padding(start = 12.dp)
                         .clickable {
                             select2 = true
@@ -140,8 +156,6 @@ fun MainDisplay(navcon: NavHostController, vm: MainViewModels) {
                         .background(
                             color = when (select2) {
                                 true -> {
-                                    sizestate = 120.dp
-                                    sizestate -= 50.dp
                                     Color.Black
                                 }
                                 false -> {
@@ -166,7 +180,7 @@ fun MainDisplay(navcon: NavHostController, vm: MainViewModels) {
                 }
             }
             Spacer(modifier = Modifier.height(12.dp))
-            LazyColumn(modifier = Modifier.padding(bottom = 8.dp)) {
+            LazyColumn(verticalArrangement = Arrangement.spacedBy(8.dp)) {
                 items(items = res.value) { get ->
                     ExpandablesComment(title = get.title, desc = get.body)
                 }
