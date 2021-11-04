@@ -1,3 +1,4 @@
 <resources>
     <string name="app_name">SimpleJson</string>
+    <string name="greetings">Selamat datang,\nMari login untuk dapat meminjam sepeda :)</string>
 </resources>

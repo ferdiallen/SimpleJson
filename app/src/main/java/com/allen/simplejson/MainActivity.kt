@@ -3,7 +3,6 @@ package com.allen.simplejson
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
-import androidx.activity.viewModels
 import androidx.compose.animation.ExperimentalAnimationApi
 import androidx.compose.material.ExperimentalMaterialApi
 import androidx.compose.runtime.Composable
@@ -40,7 +39,7 @@ class MainActivity : ComponentActivity() {
 fun SetNavigator(navcon: NavHostController) {
     val sysui = rememberSystemUiController()
     val currentEntry by navcon.currentBackStackEntryAsState()
-    NavHost(navController = navcon, startDestination = Navigators.Main.route) {
+    NavHost(navController = navcon, startDestination = Navigators.Login.route) {
         composable(route = Navigators.Main.route) {
             MainDisplay(navcon, viewModel())
         }
